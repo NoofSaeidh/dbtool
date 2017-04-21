@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBTool.CLI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace DBTool
     {
         static void Main(string[] args)
         {
+            while (true) 
+                new Interface(Console.ReadLine().Split(' '));
         }
     }
 }
