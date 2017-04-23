@@ -18,7 +18,14 @@ namespace DBTool
 #else
         static void Main(string[] args)
         {
-            new Interface(args);
+            try
+            {
+                new Interface(args);
+            }
+            catch (Exception e)
+            {
+                Console.Write(string.Join(Environment.NewLine,string.Empty,e,string.Empty));
+            }
         }
 #endif
     }

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+    <Default Server="sql"/>
+    <Records>
+        <CreateBackup Database="db" Path="c:\file.file" Server="sql"/>
+        <RestoreBackup Database="db2" Path="c:\file.file" Server="sql"/>
+        <RestoreBackup Database="db3"/>
+    </Records>
+</Config>

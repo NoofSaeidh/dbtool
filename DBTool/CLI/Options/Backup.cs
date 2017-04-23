@@ -28,7 +28,7 @@ namespace DBTool.CLI.Options
 
         public string Path { get; set; }
     }
-    [Verb("restore", HelpText = Help.Create)]
+    [Verb("restore", HelpText = Help.Restore)]
     class RestoreBackup : IBackup
     {
         public string Server { get; set; }

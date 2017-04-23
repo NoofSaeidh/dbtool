@@ -8,6 +8,7 @@ namespace DBTool.CLI.Messages
 {
     class Text
     {
-
+        public const string XmlNotCorrect = "Xml not correct.";
+        public const string Restore = "Restore backup.";
     }
 }
