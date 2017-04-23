@@ -13,7 +13,8 @@ namespace DBTool.CLI
     {
         public Interface(string[] args)
         {
-            var result = Parser.Default.ParseArguments<CreateBackup, RestoreBackup>(args);
+            var result = Parser.Default.ParseArguments<CreateBackup, RestoreBackup, Dialog>(args);
+
         }
     }
 }

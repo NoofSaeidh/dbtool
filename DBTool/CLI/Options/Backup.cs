@@ -10,9 +10,6 @@ namespace DBTool.CLI.Options
 {
     interface IBackup
     {
-        [Option('i',"interactive", Default = false,HelpText = Help.Interactive)]
-        bool Interactive { get; set; }
-
         [Option('S',"server",HelpText = Help.Server)]
         string Server { get; set; }
 
@@ -25,8 +22,6 @@ namespace DBTool.CLI.Options
     [Verb("create",HelpText = Help.Create)]
     class CreateBackup : IBackup
     {
-        public bool Interactive { get; set; }
-
         public string Server { get; set; }
 
         public string Database { get; set; }
@@ -36,8 +31,6 @@ namespace DBTool.CLI.Options
     [Verb("restore", HelpText = Help.Create)]
     class RestoreBackup : IBackup
     {
-        public bool Interactive { get; set; }
-
         public string Server { get; set; }
 
         public string Database { get; set; }

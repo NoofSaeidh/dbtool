@@ -8,6 +8,6 @@ namespace DBTool.CLI.Messages
 {
     class Text
     {
-        public const string NotImplemented = "Not implemented.";
+
     }
 }

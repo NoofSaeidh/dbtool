@@ -8,7 +8,7 @@ namespace DBTool.CLI.Messages
 {
     static class Help
     {
-        public const string Interactive = "Possibility to use values stored in config file.";
+        public const string Dialog = "Database actions in dialog mode.";
         public const string Restore = "Restore backup.";
         public const string Create = "Create backup.";
         public const string Path = "Full path to file.";
