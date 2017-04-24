@@ -57,7 +57,28 @@ namespace DBTool.CLI.Configuration
 
         protected static string Deparse(Config config)
         {
-            throw new NotImplementedException();
+            var xdoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
+            xdoc.Add(new XElement("Config",
+                        new XElement("Default"),
+                        new XElement("Records")));
+            if (config.DefaultServer != null)
+                xdoc.Descendants("Default").First().Add(new XAttribute("Server", config.DefaultServer));
+
+            if (config.Records?.Count > 0)
+            {
+                foreach (var record in config.Records)
+                {
+                    var backup = record is RestoreBackup ?
+                                    "RestoreBackup" : //record is CreateBackup ?
+                                    "CreateBackup"; //: null;
+                    xdoc.Descendants("Records").First().Add(new XElement(backup));
+                    var element = xdoc.Descendants(backup).Last();
+                    if (record.Database != null) element.Add(new XAttribute("Database", record.Database));
+                    if (record.Path != null) element.Add(new XAttribute("Path", record.Path));
+                    if (record.Server != null) element.Add(new XAttribute("Server", record.Server));
+                }
+            }
+            return string.Concat(xdoc.Declaration.ToString(),Environment.NewLine, xdoc.ToString());
         }
 
         #endregion
@@ -66,7 +87,7 @@ namespace DBTool.CLI.Configuration
 
         public void Save()
         {
-            throw new NotImplementedException();
+            Deparse(this);
         }
 
         #endregion
