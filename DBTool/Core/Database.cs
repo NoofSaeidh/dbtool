@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBTool
+namespace DBTool.Core
 {
     public class Database : IDisposable
     {
@@ -14,6 +14,7 @@ namespace DBTool
         private SqlCommand command;
         private bool newVersion;
         private string _version;
+        private const int defaultTimeout = 30000;
         #endregion
 
         #region Properties
@@ -37,6 +38,11 @@ namespace DBTool
         public string User { get; set; }
         public string Password { get; set; }
         public bool IntegratedSecurity { get; set; } = true;
+        public int? Timeout
+        {
+            get { return command?.CommandTimeout; }
+            set { command.CommandTimeout = value.GetValueOrDefault(); }
+        }
         #endregion
 
         #region Init
@@ -57,7 +63,7 @@ namespace DBTool
         {
             command = new SqlCommand()
             {
-                CommandTimeout = 300,
+                CommandTimeout = defaultTimeout,
             };
         }
         public void Connect(bool master = false)
@@ -82,7 +88,7 @@ namespace DBTool
                 .ToString();
             return version;
         }
-        public void BackupDB(string fileName)
+        public void CreateBackup(string fileName)
         {
             command
                 .Open()
@@ -90,7 +96,7 @@ namespace DBTool
                     , close: true);
 
         }
-        public void RestoreDB(string fileName)
+        public void RestoreBackup(string fileName)
         {
             command.Open();
 

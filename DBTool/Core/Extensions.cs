@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBTool
+namespace DBTool.Core
 {
     public static class SqlExtensions
     {
