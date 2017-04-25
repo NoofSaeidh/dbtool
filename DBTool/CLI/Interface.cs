@@ -18,8 +18,10 @@ namespace DBTool.CLI
         {
             var result = Parser.Default.ParseArguments<CreateBackup, RestoreBackup, Dialog>(args);
             var mapped = result.MapResult(option => option,_ => null);
+            if (mapped == null) return;
+
             if (mapped is Dialog) throw new NotImplementedException();
-            Config.Initialize(Path.Combine(Environment.CurrentDirectory, "CLI", "Configuration", "Config.xml"));
+            Config.Initialize(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config.xml"));
 
             var backup = mapped as IBackup;
             if(backup!=null)
