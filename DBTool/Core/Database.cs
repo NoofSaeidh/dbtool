@@ -56,7 +56,7 @@ namespace DBTool.Core
             Name = database;
             IntegratedSecurity = integratedSecurity;
             User = user;
-            Password = Password;
+            Password = password;
             Connect(false);
         }
         public Database()

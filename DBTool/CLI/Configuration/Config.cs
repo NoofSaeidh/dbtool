@@ -40,11 +40,17 @@ namespace DBTool.CLI.Configuration
             foreach (var record in records.Descendants())
             {
                 IBackup backup;
-                if (record.Name == nameof(CreateBackup))
-                    backup = new CreateBackup();
-                else if (record.Name == nameof(RestoreBackup))
-                    backup = new RestoreBackup();
-                else throw new System.Xml.XmlException(Text.XmlNotCorrect);
+                switch (record.Name.ToString())
+                {
+                    case nameof(CreateBackup):
+                        backup = new CreateBackup();
+                        break;
+                    case nameof(RestoreBackup):
+                        backup = new RestoreBackup();
+                        break;
+                    default:
+                        throw new System.Xml.XmlException(Text.XmlNotCorrect);
+                }
 
                 backup.Database = record.Attribute(nameof(backup.Database))?.Value;
                 backup.Path = record.Attribute(nameof(backup.Path))?.Value;
