@@ -14,7 +14,7 @@ namespace DBTool.CLI.Configuration
     {
         #region Properties
 
-        public List<IBackup> Records { get; set; }
+        public List<IDatabase> Records { get; set; }
 
         public string DefaultServer { get; set; }
 
@@ -36,10 +36,10 @@ namespace DBTool.CLI.Configuration
             config.DefaultServer = defaults.Attributes("Server").FirstOrDefault()?.Value;
 
             var records = xdoc.Descendants("Records");
-            config.Records = new List<IBackup>();
+            config.Records = new List<IDatabase>();
             foreach (var record in records.Descendants())
             {
-                IBackup backup;
+                IDatabase backup;
                 switch (record.Name.ToString())
                 {
                     case nameof(CreateBackup):

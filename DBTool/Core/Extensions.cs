@@ -1,70 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DBTool.Core
 {
     public static class SqlExtensions
     {
-        public static SqlCommand Script(this SqlCommand cmd, string script)
+        public static T ExecuteDispose<T>(this SqlCommand command, Func<SqlCommand, T> action)
         {
-            cmd.CommandText = script;
-            return cmd;
-        }
-        public static SqlCommand Open(this SqlCommand cmd)
-        {
-            cmd.Connection.Open();
-            return cmd;
-        }
-        public static SqlCommand Close(this SqlCommand cmd)
-        {
-            cmd.Connection.Close();
-            return cmd;
-        }
-        public static object ExecuteScalar(this SqlCommand cmd, bool close)
-        {
-            var r = cmd.ExecuteScalar();
-            if(close) cmd.Close();
-            return r;
-        }
-        public static SqlDataReader ExecuteReader(this SqlCommand cmd, bool close)
-        {
-            var r = cmd.ExecuteReader();
-            if (close) cmd.Close();
-            return r;
-        }
-        public static int ExecuteNonQuery(this SqlCommand cmd, bool close)
-        {
-            var r = cmd.ExecuteNonQuery();
-            if (close) cmd.Close();
-            return r;
+            var result = action(command);
+            command.Dispose();
+            return result;
         }
 
+        public static int ExecuteNonQuery(this SqlCommand command, string cmdText, bool checkAnyRowAffected = false)
+        {
+            command.CommandText = cmdText;
+            var result = command.ExecuteNonQuery();
+            if (checkAnyRowAffected && result < 0)
+            {
+                throw new DatabaseExecutionException("No rows affected.");
+            }
+            return result;
+        }
 
+        public static int ExecuteNonQueryDispose(this SqlCommand command, string cmdText, bool checkAnyRowAffected = false) => ExecuteDispose(command, c => c.ExecuteNonQuery(cmdText, checkAnyRowAffected));
 
-        public static object ExecuteQuery(this SqlCommand cmd, string script, bool close = false)
+        public static SqlCommand ExecuteNonQueryOut(this SqlCommand command, string cmdText, out int result, bool checkAnyRowAffected = false) => ExecuteOut(command, c => c.ExecuteNonQuery(cmdText, checkAnyRowAffected), out result);
+
+        public static SqlCommand ExecuteOut<TOut>(this SqlCommand command, Func<SqlCommand, TOut> action, out TOut result)
         {
-            return cmd.Script(script).ExecuteScalar(close);
+            result = action(command);
+            return command;
         }
-        public static SqlDataReader ExecuteReaderQuery(this SqlCommand cmd, string script, bool close = false)
+
+        public static SqlDataReader ExecuteReader(this SqlCommand command, string cmdText)
         {
-            return cmd.Script(script).ExecuteReader(close);
+            command.CommandText = cmdText;
+            return command.ExecuteReader();
         }
-        public static int ExecuteScript(this SqlCommand cmd, string script, bool close = false)
+
+        public static SqlDataReader ExecuteReaderDispose(this SqlCommand command, string cmdText) => ExecuteDispose(command, c => c.ExecuteReader(cmdText));
+
+        public static SqlCommand ExecuteReaderOut(this SqlCommand command, string cmdText, out SqlDataReader result) => ExecuteOut(command, c => c.ExecuteReader(cmdText), out result);
+
+        public static object ExecuteScalar(this SqlCommand command, string cmdText)
         {
-            return cmd.Script(script).ExecuteNonQuery(close);
+            command.CommandText = cmdText;
+            return command.ExecuteScalar();
         }
+
+        public static T ExecuteScalar<T>(this SqlCommand command, string cmdText) => (T)ExecuteScalar(command, cmdText);
+
+        public static object ExecuteScalarDispose(this SqlCommand command, string cmdText) => ExecuteDispose(command, c => c.ExecuteScalar(cmdText));
+
+        public static T ExecuteScalarDispose<T>(this SqlCommand command, string cmdText) => ExecuteDispose(command, c => c.ExecuteScalar<T>(cmdText));
+
+        public static SqlCommand ExecuteScalarOut(this SqlCommand command, string cmdText, out object result) => ExecuteOut(command, c => c.ExecuteScalar(cmdText), out result);
+
+        public static SqlCommand ExecuteScalarOut<T>(this SqlCommand command, string cmdText, out T result) => ExecuteOut(command, c => c.ExecuteScalar<T>(cmdText), out result);
     }
-    static class StringExtensions
+
+    internal static class StringExtensions
     {
-        public static string Form(this string str, params object[] args)
+        public static string FormatWith(this string str, params object[] args)
         {
             return string.Format(str, args);
         }
-        public static string Form(this string str, object arg0)
+
+        public static string FormatWith(this string str, object arg0)
         {
             return string.Format(str, arg0);
         }
