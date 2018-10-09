@@ -49,10 +49,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="CommandLine, Version=2.3.0.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.3.0\lib\net45\CommandLine.dll</HintPath>
     </Reference>
+    <Reference Include="Config.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=d836a57afd299520, processorArchitecture=MSIL">
+      <HintPath>..\packages\Config.Net.4.10.1\lib\net452\Config.Net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -62,18 +69,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLI\Configuration\Config.cs" />
-    <Compile Include="CLI\Extensions.cs" />
-    <Compile Include="CLI\Highlight.cs" />
-    <Compile Include="CLI\Interface.cs" />
-    <Compile Include="CLI\Messages\Help.cs" />
-    <Compile Include="CLI\Messages\Text.cs" />
-    <Compile Include="CLI\Options\Backup.cs" />
-    <Compile Include="CLI\Options\Dialog.cs" />
+    <Compile Include="Console\Options\IConfigFile.cs" />
+    <Compile Include="Console\Options\IConfiguration.cs" />
+    <Compile Include="Console\Options\IConnectionString.cs" />
+    <Compile Include="Console\Options\IServer.cs" />
+    <Compile Include="Configuration\ConfigurationManager.cs" />
+    <Compile Include="Configuration\IConfig.cs" />
+    <Compile Include="Console\Extensions.cs" />
+    <Compile Include="Console\Highlight.cs" />
+    <Compile Include="ConsoleClient.cs" />
+    <Compile Include="Console\Options\Backup.cs" />
+    <Compile Include="Console\Options\Dialog.cs" />
     <Compile Include="Core\ScriptExecutor.cs" />
     <Compile Include="Core\DatabaseExecutionException.cs" />
     <Compile Include="Core\Extensions.cs" />
     <Compile Include="Core\Scripts.cs" />
+    <Compile Include="Executor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -82,11 +93,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <RootContent Include="CLI\Configuration\Config.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </RootContent>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">

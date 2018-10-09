@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DBTool.CLI
+namespace DBTool.Console
 {
-    static class Extensions
+    // todo: rewrite
+    internal static class Extensions
     {
         public static void Write(this string line)
         {
-            Console.Write(line);
+            System.Console.Write(line);
         }
+
         public static void Write(this string line, params object[] args)
         {
-            Console.Write(line, args);
+            System.Console.Write(line, args);
         }
+
         public static void WriteColor(this string line, ConsoleColor? color = null, ColorGroundType? type = null)
         {
             if (type == null)
@@ -25,33 +26,36 @@ namespace DBTool.CLI
 
             if (type == ColorGroundType.Foreground)
             {
-                var defColor = Console.ForegroundColor;
+                var defColor = System.Console.ForegroundColor;
                 foreach (var cline in Separate(line, (ConsoleColor)color))
                 {
-                    Console.ForegroundColor = cline.Color ?? defColor;
-                    Console.Write(cline.String);
+                    System.Console.ForegroundColor = cline.Color ?? defColor;
+                    System.Console.Write(cline.String);
                 }
-                Console.ForegroundColor = defColor;
+                System.Console.ForegroundColor = defColor;
             }
             else
             {
-                var defColor = Console.BackgroundColor;
+                var defColor = System.Console.BackgroundColor;
                 foreach (var cline in Separate(line, (ConsoleColor)color))
                 {
-                    Console.BackgroundColor = cline.Color ?? defColor;
-                    Console.Write(cline.String);
+                    System.Console.BackgroundColor = cline.Color ?? defColor;
+                    System.Console.Write(cline.String);
                 }
-                Console.BackgroundColor = defColor;
+                System.Console.BackgroundColor = defColor;
             }
         }
+
         public static void WriteLine(this string line)
         {
-            Console.WriteLine(line);
+            System.Console.WriteLine(line);
         }
+
         public static void WriteLine(this string line, params object[] args)
         {
-            Console.WriteLine(line, args);
+            System.Console.WriteLine(line, args);
         }
+
         public static void WriteLineColor(this string line, ConsoleColor? color = null, ColorGroundType? type = null)
         {
             if (type == null)
@@ -61,30 +65,29 @@ namespace DBTool.CLI
 
             if (type == ColorGroundType.Foreground)
             {
-                var defColor = Console.ForegroundColor;
+                var defColor = System.Console.ForegroundColor;
                 foreach (var cline in Separate(line, (ConsoleColor)color))
                 {
-                    Console.ForegroundColor = cline.Color ?? defColor;
-                    Console.Write(cline.String);
+                    System.Console.ForegroundColor = cline.Color ?? defColor;
+                    System.Console.Write(cline.String);
                 }
-                Console.ForegroundColor = defColor;
+                System.Console.ForegroundColor = defColor;
             }
             else
             {
-                var defColor = Console.BackgroundColor;
+                var defColor = System.Console.BackgroundColor;
                 foreach (var cline in Separate(line, (ConsoleColor)color))
                 {
-                    Console.BackgroundColor = cline.Color ?? defColor;
-                    Console.Write(cline.String);
+                    System.Console.BackgroundColor = cline.Color ?? defColor;
+                    System.Console.Write(cline.String);
                 }
-                Console.BackgroundColor = defColor;
+                System.Console.BackgroundColor = defColor;
             }
-            Console.WriteLine();
+            System.Console.WriteLine();
         }
 
         public static ConsoleColor DefaultHighlighColor { get; set; } = Highlight.Color;
         public static ColorGroundType DefaultGroundType { get; set; } = Highlight.GroundType;
-
 
         private static IEnumerable<ColorString> Separate(string line, ConsoleColor color)
         {
@@ -112,7 +115,7 @@ namespace DBTool.CLI
                     if (ch == Highlight.SeparatorRight) throw new Exception($"Each right separator '{Highlight.SeparatorRight}' must be to the right of left separator '{Highlight.SeparatorLeft}'");
                     if (ch == Highlight.SeparatorLeft)
                     {
-                        if(!string.IsNullOrEmpty(str)) poses.Add(new ColorString(str, null));
+                        if (!string.IsNullOrEmpty(str)) poses.Add(new ColorString(str, null));
                         str = "";
                         insep = true;
                         continue;
@@ -121,20 +124,23 @@ namespace DBTool.CLI
                     continue;
                 }
             }
-            if(insep) throw new Exception($"Text must contains equals quantity of left separator '{Highlight.SeparatorLeft}' and right separator '{Highlight.SeparatorRight}'");
+            if (insep) throw new Exception($"Text must contains equals quantity of left separator '{Highlight.SeparatorLeft}' and right separator '{Highlight.SeparatorRight}'");
             if (!string.IsNullOrEmpty(str)) poses.Add(new ColorString(str, null));
             return poses;
         }
+
         private struct ColorString
         {
             public string String;
             public ConsoleColor? Color;
+
             public ColorString(string cstring, ConsoleColor? color)
             {
                 String = cstring;
                 Color = color;
             }
         }
+
         public enum ColorGroundType
         {
             Foreground,
@@ -161,5 +167,4 @@ namespace DBTool.CLI
             return text.Substring(0, pos) + Highlight.SeparatorLeft + text.Substring(pos, 1) + Highlight.SeparatorRight + text.Substring(pos + 1, text.Length - pos - 1);
         }
     }
-
 }
